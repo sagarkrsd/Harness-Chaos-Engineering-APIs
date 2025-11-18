@@ -218,7 +218,7 @@ func main() {
 npm install -g newman
 
 # Run collection tests
-newman run "postman/collections/Harness Chaos Engineering APIs.postman_collection.json" \
+newman run "postman/collections/Harness Chaos Engineering APIs - REST.postman_collection.json" \
   -e "postman/environments/QA.postman_environment.json"
 ```
 
