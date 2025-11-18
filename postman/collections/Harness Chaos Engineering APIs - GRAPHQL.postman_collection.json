@@ -1,0 +1,1061 @@
+{
+  "info": {
+    "_postman_id": "59b35825-6240-4b45-9974-6bb869741318",
+    "name": "Harness Chaos Engineering APIs - GRAPHQL",
+    "description": "Please follow the below guidelines to run a sample Chaos experiment such as _**Pod Delete**_:\n\nSequence in which the APIs should be executed to run a sample chaos experiment such as _**Pod Delete**_ (all the APIs to do so are present in folder \"**Run Pod Delete Chaos Experiment**\" as well) -\n\nListed below are the required inputs and how to access (or generate) them. We will refer these variables in the API requests explained in this tutorial -\n\n1\\. **url**\n\nThis is the Harness CE server URL serving the Chaos API requests.\n\nYou can find this URL in the Chaos API doc(\\`top right\\`).For instance, [https://app.harness.io/gateway/chaos/manager/api/query](https://app.harness.io/gateway/chaos/manager/api/query) is the Harness CE server URL for production environment.If you are using \\[Chaos postman collection\\]([https://elements.getpostman.com/redirect?entityId=25469526-59b35825-6240-4b45-9974-6bb869741318&amp;entityType=collection](https://elements.getpostman.com/redirect?entityId=25469526-59b35825-6240-4b45-9974-6bb869741318&entityType=collection)), this value will be pre-filled in 2 postman variables like below:  \n\\`\\`\\`\n\nbase_url - [https://app.harness.io](https://app.harness.iochaos_url)\n\nchaos_url - {{base_url}}/gateway/chaos/manager/api/query\n\n\\`\\`\\`\n\n2\\. **account_id**\n\nThis is your Harness account Id. Please use the account where you would like to run Chaos experiments.\n\nYou can retrieve your account Id by following the below steps:\n\n- Go to \\`ACCOUNT SETTINGS\\` in \\[Harness\\]([https://app.harness.io/).](https://app.harness.io/).2)\n    \n- Click on \\`Overview\\`.\n    \n- Copy the value of \\`Account Id\\`.\n    \n\n3\\. **project_id**\n\nThis is your Harness project Id. Please use the project where you would like to run Chaos experiments.\n\nYou can retrieve your project Id by following the below steps:\n\n- Go to \\`Projects\\` in \\[Harness\\]([https://app.harness.io/).](https://app.harness.io/).\n    \n- Select the project where you would like to run the Chaos experiments or create a new project.\n    \n- Click on \\`Overview\\`.\n    \n- Copy the value of \\`Id\\`.\n    \n- Please make sure to copy the value of \\`Organization\\` as well, this will be the value of next required variable \\`org_id\\`.\n    \n\n4\\. **org_id**\n\nThis is your Harness organization Id. Please use the organization where you would like to run Chaos experiments.\n\nYou can retrieve your organization Id by following the below steps:\n\n**See above step to retrieve project_id - you would have copied the value of org_id as well in that step, if not please follow the same steps again to retrieve organization Id**\n\n5\\. **API-KEY-TOKEN**\n\nYou can use an existing Harness API key token of the same Harness account selected in above steps or you can create a new one by following the below steps:\n\n- Click on \\`MY PROFILE\\` in \\[Harness\\]([https://app.harness.io/).](https://app.harness.io/).2)\n    \n- Go to \\`My API Keys\\` section and click on \\`+ API Key\\` button to create a new API Key.\n    \n- Enter a \\`Name\\` for the API Key(optional Description/Tags) and click on \\`Save\\`.\n    \n- Under the newly created API Key, click on \\`+ Token\\` button to generate a new token for this API Key.\n    \n- Enter the \\`Name\\` and select the \\`Expiration\\`(time for which this token will be valid) and click on \\`Generate Token\\`.\n    \n- Please make sure to copy the value of the token generated and store somewhere safe, you may not be able to copy this later.\n    \n\n1. _**RegisterInfra**_ - Register your Infra where you want to run chaos experiments i.e., your kubernetes cluster, etc.  \n    \\- `Retrieve the infra manifest by forming the URL like chaos_server_url/file/token.yaml, example url could be`[https://app.harness.io/gateway/chaos/manager/api/file/token.yaml](https://app.harness.io/gateway/chaos/manager/api/file/token.yaml) where token is the value of token retrieved after running `RegisterInfra` API.  \n    \\- `Apply the manifest/.yaml file on your infra such as k8s cluster, some machine, etc.`  \n    \\- `Required Inputs to be modified - no input needs to be modified.`\\- `Note down the infra ID received in response.`\n    \n2. _**GetInfraDetails**_ (_**Optional**_ - required only if you want to get the details of your newly registered infra or to check if your infra is active or not before creating a Chaos workflow) - It will return the details of a given infra based on infra ID input.\n    \n3. _**ListPredefinedWorkflow**_ (_**Optional**_ - required only if you want to run a different chaos experiment other than pod-delete ---- by default --- pod delete experiment manifest is present in CreateChaosWorkFlow api call) - This will list down all the available predefined workflows/experiments that can be run on your infra, please select one of them and copy the manifest from there and make necessary changes such as namespace, etc.  \n    `Required Inputs to be modified - no input needs to be modified.`\n    \n4. apiVersion: apps/v1 kind: Deployment metadata: name: nginx-deployment namespace: hce spec: selector: matchLabels: app: cartservice replicas: 2 # tells deployment to run 2 pods matching the template template: metadata: labels: app: cartservice spec: containers: - name: nginx image: nginx:1.14.2 ports: - containerPort: 80\n    \n5. _**RunChaosExperiment**_ - Once a workflow is created, you can now execute the experiment by providing the workflow id from step3.  \n    `Required Inputs to be modified - workflowID - provide the id of workflow created and retrieved in response of` _**CreateChaosWorkFlow API call.**_\n    \n6. _**ListWorkflowRun (Optional -**_ required only if you want to check the details of the workflow currently running - details can be validated by UI as well if user prefers to do so**) -** It will list down all the workflow runs with the required details for those workflows, this API call can be used to validate if the workflow created by RunChaosExperiment API call is running or not, completed, etc using the field \\`_**phase__****__**__\\`_**.**_**Once these steps are executed, user can go and check their cluster/hce namespace, experiments will start running there**_.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25469526",
+    "_collection_link": "https://www.postman.com/harness-chaos-engineering/workspace/harness-chaos-engineering-public/collection/25469526-59b35825-6240-4b45-9974-6bb869741318?action=share&source=collection_link&creator=25469526"
+  },
+  "item": [
+    {
+      "name": "mutations",
+      "item": [
+        {
+          "name": "RegisterInfra",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($identifiers: IdentifiersRequest!, $request: RegisterInfraRequest!) {\n  registerInfra(identifiers: $identifiers, request: $request) {\n    token\n    infraID\n    name\n    manifest\n  }\n}\n",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n    \"name\": \"my-test-chaos-infra\",\n    \"environmentID\": \"my-test-chaos-env\",\n    \"description\": \"Test Chaos Environment\",\n    \"platformName\": \"my-test-platform\",\n    \"infraNamespace\": \"hce\",\n    \"serviceAccount\": \"hce\",\n    \"infraScope\": \"cluster\",\n    \"infraNsExists\": false,\n    \"infraSaExists\": false,\n    \"installationType\": \"MANIFEST\",\n    \"skipSsl\": false\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AddChaosHub",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation AddChaosHub(\n  $request: ChaosHubRequest!,\n  $identifiers: IdentifiersRequest!\n) {\n  addChaosHub(\n    request: $request,\n    identifiers: $identifiers\n  ) {\n    id\n    identifiers {\n      orgIdentifier\n      accountIdentifier\n      projectIdentifier\n    }\n    repoName\n    repoURL\n    repoBranch\n    AuthType\n    connectorId\n    connectorScope\n    name\n    createdAt\n    updatedAt\n    lastSyncedAt\n    isDefault\n    tags\n    createdBy {\n      userID\n      username\n      email\n    }\n    updatedBy {\n      userID\n      username\n      email\n    }\n    description\n  }\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n    \"hubName\": \"{{replace-with-name-of-the-chaoshub}}\",\n    \"connectorId\": \"{{replace-with-gitConnector-id}}\",\n    \"connectorScope\": \"{{replace-with-connector-scope}}\",\n    \"repoBranch\": \"{{replace-with-branch-of-the-git-repo}}\",\n    \"tags\": [{{replace-with-comma-separated-tags}}]\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateChaosHub",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation UpdateChaosHub(\n  $id: ID!,\n  $request: ChaosHubRequest!,\n  $identifiers: IdentifiersRequest!\n) {\n  updateChaosHub(\n    id: $id,\n    request: $request,\n    identifiers: $identifiers\n  ) {\n    id\n    identifiers {\n      orgIdentifier\n      accountIdentifier\n      projectIdentifier\n    }\n    repoName\n    repoURL\n    repoBranch\n    AuthType\n    connectorId\n    connectorScope\n    name\n    createdAt\n    updatedAt\n    lastSyncedAt\n    isDefault\n    tags\n    createdBy {\n      userID\n      username\n      email\n    }\n    updatedBy {\n      userID\n      username\n      email\n    }\n    description\n  }\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"id\": {{replace-with-chaos-hub-id-to-update}},\n  \"request\": {\n    \"hubName\": \"{{replace-with-name-of-the-chaoshub}}\",\n    \"connectorId\": \"{{replace-with-gitConnector-id}}\",\n    \"connectorScope\": \"{{replace-with-connector-scope}}\",\n    \"repoBranch\": \"{{replace-with-branch-of-the-git-repo}}\",\n    \"tags\":[{{replace-with-comma-separated-tags}}]\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SyncChaosHub",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation SyncChaosHub(\n  $id: ID!,\n  $identifiers: IdentifiersRequest!\n) {\n  syncChaosHub(\n    id: $id,\n    identifiers: $identifiers\n  )\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"id\": {{replace-with-chaoshub-id-to-sync}}\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PushWorkflowToChaosHub",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation PushWorkflowToChaosHub(\n  $request: PushWorkflowToChaosHubInput!,\n  $identifiers: IdentifiersRequest!\n) {\n  pushWorkflowToChaosHub(\n    request: $request,\n    identifiers: $identifiers\n  )\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n    \"id\": \"{{replace-with-hubID-of-the-selected-ChaosHub}}\",\n    \"manifest\": \"{{replace-with-workflow-manifest-to-push}}\",\n    \"scenarioName\": \"{{replace-with-scenario-name}}\",\n    \"description\": \"{{replace-with-scenario-description}}\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteChaosHub",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation DeleteChaosHub(\n  $id: ID!,\n  $identifiers: IdentifiersRequest!\n) {\n  deleteChaosHub(\n    id: $id,\n    identifiers: $identifiers\n  )\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"id\": \"{{replace-with-chaos-hub-id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteChaosWorkflow",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation DeleteChaosWorkflow(\n  $workflowID: String!,\n  $workflowRunID: String,\n  $identifiers: IdentifiersRequest!\n) {\n  deleteChaosWorkflow(\n    workflowID: $workflowID,\n    workflowRunID: $workflowRunID,\n    identifiers: $identifiers\n  )\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"workflowID\": {{replace-with-your-workflow-id}}\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetManifestWithInfraID",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation GetManifestWithInfraID(\n  $identifiers: IdentifiersRequest!,\n  $infraID: String!,\n  $accessKey: String!\n) {\n  getManifestWithInfraID(\n    identifiers: $identifiers,\n    infraID: $infraID,\n    accessKey: $accessKey\n  )\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"infraID\": {{replace-with-your-infra-id}},\n  \"accessKey\": {{replace-with-your-access-key}}\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateChaosWorkFlow",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation CreateChaosWorkFlow(\n  $request: ChaosWorkFlowRequest!\n  $identifiers: IdentifiersRequest!\n) {\n  createChaosWorkFlow(request: $request, identifiers: $identifiers) {\n    workflowID\n    cronSyntax\n    workflowName\n    workflowDescription\n    isCustomWorkflow\n    tags\n  }\n}\n",
+                "variables": "{\n   \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\t\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n    \"workflowManifest\": \"{\\r\\n    \\\"kind\\\": \\\"Workflow\\\",\\r\\n    \\\"apiVersion\\\": \\\"argoproj.io\\/v1alpha1\\\",\\r\\n    \\\"metadata\\\": {\\r\\n        \\\"name\\\": \\\"my-pod-delete-experiment\\\",\\r\\n        \\\"namespace\\\": \\\"hce\\\",\\r\\n        \\\"creationTimestamp\\\": null,\\r\\n        \\\"labels\\\": {\\r\\n            \\\"infra_id\\\": \\\"e640346b-bff5-40db-a828-68b44e06e2d1\\\",\\r\\n            \\\"revision_id\\\": \\\"f82e8c99-8efd-4289-a324-eadfd9667574\\\",\\r\\n            \\\"workflow_id\\\": \\\"80557c8b-531c-49d2-a39e-9f72c4674c2c\\\",\\r\\n            \\\"workflows.argoproj.io\\/controller-instanceid\\\": \\\"e640346b-bff5-40db-a828-68b44e06e2d1\\\"\\r\\n        }\\r\\n    },\\r\\n    \\\"spec\\\": {\\r\\n        \\\"templates\\\": [\\r\\n            {\\r\\n                \\\"name\\\": \\\"test-0-7-x-exp\\\",\\r\\n                \\\"inputs\\\": {},\\r\\n                \\\"outputs\\\": {},\\r\\n                \\\"metadata\\\": {},\\r\\n                \\\"steps\\\": [\\r\\n                    [\\r\\n                        {\\r\\n                            \\\"name\\\": \\\"install-chaos-faults\\\",\\r\\n                            \\\"template\\\": \\\"install-chaos-faults\\\",\\r\\n                            \\\"arguments\\\": {}\\r\\n                        }\\r\\n                    ],\\r\\n                    [\\r\\n                        {\\r\\n                            \\\"name\\\": \\\"pod-delete-ji5\\\",\\r\\n                            \\\"template\\\": \\\"pod-delete-ji5\\\",\\r\\n                            \\\"arguments\\\": {}\\r\\n                        }\\r\\n                    ],\\r\\n                    [\\r\\n                        {\\r\\n                            \\\"name\\\": \\\"cleanup-chaos-resources\\\",\\r\\n                            \\\"template\\\": \\\"cleanup-chaos-resources\\\",\\r\\n                            \\\"arguments\\\": {}\\r\\n                        }\\r\\n                    ]\\r\\n                ]\\r\\n            },\\r\\n            {\\r\\n                \\\"name\\\": \\\"install-chaos-faults\\\",\\r\\n                \\\"inputs\\\": {\\r\\n                    \\\"artifacts\\\": [\\r\\n                        {\\r\\n                            \\\"name\\\": \\\"pod-delete-ji5\\\",\\r\\n                            \\\"path\\\": \\\"\\/tmp\\/pod-delete-ji5.yaml\\\",\\r\\n                            \\\"raw\\\": {\\r\\n                                \\\"data\\\": \\\"apiVersion: litmuschaos.io\\/v1alpha1\\\\ndescription:\\\\n  message: |\\\\n    Deletes a pod belonging to a deployment\\/statefulset\\/daemonset\\\\nkind: ChaosExperiment\\\\nmetadata:\\\\n  name: pod-delete\\\\n  labels:\\\\n    name: pod-delete\\\\n    app.kubernetes.io\\/part-of: litmus\\\\n    app.kubernetes.io\\/component: chaosexperiment\\\\n    app.kubernetes.io\\/version: ci\\\\nspec:\\\\n  definition:\\\\n    scope: Namespaced\\\\n    permissions:\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - pods\\\\n        verbs:\\\\n          - create\\\\n          - delete\\\\n          - get\\\\n          - list\\\\n          - patch\\\\n          - update\\\\n          - deletecollection\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - events\\\\n        verbs:\\\\n          - create\\\\n          - get\\\\n          - list\\\\n          - patch\\\\n          - update\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - configmaps\\\\n        verbs:\\\\n          - get\\\\n          - list\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - pods\\/log\\\\n        verbs:\\\\n          - get\\\\n          - list\\\\n          - watch\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - pods\\/exec\\\\n        verbs:\\\\n          - get\\\\n          - list\\\\n          - create\\\\n      - apiGroups:\\\\n          - apps\\\\n        resources:\\\\n          - deployments\\\\n          - statefulsets\\\\n          - replicasets\\\\n          - daemonsets\\\\n        verbs:\\\\n          - list\\\\n          - get\\\\n      - apiGroups:\\\\n          - apps.openshift.io\\\\n        resources:\\\\n          - deploymentconfigs\\\\n        verbs:\\\\n          - list\\\\n          - get\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - replicationcontrollers\\\\n        verbs:\\\\n          - get\\\\n          - list\\\\n      - apiGroups:\\\\n          - argoproj.io\\\\n        resources:\\\\n          - rollouts\\\\n        verbs:\\\\n          - list\\\\n          - get\\\\n      - apiGroups:\\\\n          - batch\\\\n        resources:\\\\n          - jobs\\\\n        verbs:\\\\n          - create\\\\n          - list\\\\n          - get\\\\n          - delete\\\\n          - deletecollection\\\\n      - apiGroups:\\\\n          - litmuschaos.io\\\\n        resources:\\\\n          - chaosengines\\\\n          - chaosexperiments\\\\n          - chaosresults\\\\n        verbs:\\\\n          - create\\\\n          - list\\\\n          - get\\\\n          - patch\\\\n          - update\\\\n          - delete\\\\n    image: chaosnative\\/go-runner:3.0.0-saas\\\\n    imagePullPolicy: Always\\\\n    args:\\\\n      - -c\\\\n      - .\\/experiments -name pod-delete\\\\n    command:\\\\n      - \\/bin\\/bash\\\\n    env:\\\\n      - name: TOTAL_CHAOS_DURATION\\\\n        value: \\\\\\\"15\\\\\\\"\\\\n      - name: RAMP_TIME\\\\n        value: \\\\\\\"\\\\\\\"\\\\n      - name: FORCE\\\\n        value: \\\\\\\"true\\\\\\\"\\\\n      - name: CHAOS_INTERVAL\\\\n        value: \\\\\\\"5\\\\\\\"\\\\n      - name: PODS_AFFECTED_PERC\\\\n        value: \\\\\\\"\\\\\\\"\\\\n      - name: TARGET_CONTAINER\\\\n        value: \\\\\\\"\\\\\\\"\\\\n      - name: TARGET_PODS\\\\n        value: \\\\\\\"\\\\\\\"\\\\n      - name: DEFAULT_HEALTH_CHECK\\\\n        value: \\\\\\\"false\\\\\\\"\\\\n      - name: NODE_LABEL\\\\n        value: \\\\\\\"\\\\\\\"\\\\n      - name: SEQUENCE\\\\n        value: parallel\\\\n    labels:\\\\n      name: pod-delete\\\\n      app.kubernetes.io\\/part-of: litmus\\\\n      app.kubernetes.io\\/component: experiment-job\\\\n      app.kubernetes.io\\/version: ci\\\\n\\\"\\r\\n                            }\\r\\n                        }\\r\\n                    ]\\r\\n                },\\r\\n                \\\"outputs\\\": {},\\r\\n                \\\"metadata\\\": {},\\r\\n                \\\"container\\\": {\\r\\n                    \\\"name\\\": \\\"\\\",\\r\\n                    \\\"image\\\": \\\"chaosnative\\/k8s:2.11.0\\\",\\r\\n                    \\\"command\\\": [\\r\\n                        \\\"sh\\\",\\r\\n                        \\\"-c\\\"\\r\\n                    ],\\r\\n                    \\\"args\\\": [\\r\\n                        \\\"kubectl apply -f \\/tmp\\/ -n {{workflow.parameters.adminModeNamespace}} && sleep 30\\\"\\r\\n                    ],\\r\\n                    \\\"resources\\\": {}\\r\\n                }\\r\\n            },\\r\\n            {\\r\\n                \\\"name\\\": \\\"cleanup-chaos-resources\\\",\\r\\n                \\\"inputs\\\": {},\\r\\n                \\\"outputs\\\": {},\\r\\n                \\\"metadata\\\": {},\\r\\n                \\\"container\\\": {\\r\\n                    \\\"name\\\": \\\"\\\",\\r\\n                    \\\"image\\\": \\\"chaosnative\\/k8s:2.11.0\\\",\\r\\n                    \\\"command\\\": [\\r\\n                        \\\"sh\\\",\\r\\n                        \\\"-c\\\"\\r\\n                    ],\\r\\n                    \\\"args\\\": [\\r\\n                        \\\"kubectl delete chaosengine -l workflow_run_id={{workflow.uid}} -n {{workflow.parameters.adminModeNamespace}}\\\"\\r\\n                    ],\\r\\n                    \\\"resources\\\": {}\\r\\n                }\\r\\n            },\\r\\n            {\\r\\n                \\\"name\\\": \\\"pod-delete-ji5\\\",\\r\\n                \\\"inputs\\\": {\\r\\n                    \\\"artifacts\\\": [\\r\\n                        {\\r\\n                            \\\"name\\\": \\\"pod-delete-ji5\\\",\\r\\n                            \\\"path\\\": \\\"\\/tmp\\/chaosengine-pod-delete-ji5.yaml\\\",\\r\\n                            \\\"raw\\\": {\\r\\n                                \\\"data\\\": \\\"apiVersion: litmuschaos.io\\\\\\/v1alpha1\\\\r\\\\nkind: ChaosEngine\\\\r\\\\nmetadata:\\\\r\\\\n  namespace: \\\\\\\"{{workflow.parameters.adminModeNamespace}}\\\\\\\"\\\\r\\\\n  generateName: pod-delete-ji5\\\\r\\\\n  labels:\\\\r\\\\n    workflow_run_id: \\\\\\\"{{ workflow.uid }}\\\\\\\"\\\\r\\\\n    workflow_name: my-pod-delete-experiment\\\\r\\\\nspec:\\\\r\\\\n  appinfo:\\\\r\\\\n    appns: hce\\\\r\\\\n    applabel: app=cartservice\\\\r\\\\n    appkind: deployment\\\\r\\\\n  engineState: active\\\\r\\\\n  chaosServiceAccount: litmus-admin\\\\r\\\\n  experiments:\\\\r\\\\n    - name: pod-delete\\\\r\\\\n      spec:\\\\r\\\\n        components:\\\\r\\\\n          env:\\\\r\\\\n            - name: TOTAL_CHAOS_DURATION\\\\r\\\\n              value: \\\\\\\"30\\\\\\\"\\\\r\\\\n            - name: CHAOS_INTERVAL\\\\r\\\\n              value: \\\\\\\"10\\\\\\\"\\\\r\\\\n            - name: FORCE\\\\r\\\\n              value: \\\\\\\"false\\\\\\\"\\\\r\\\\n            - name: PODS_AFFECTED_PERC\\\\r\\\\n              value: \\\\\\\"\\\\\\\"\\\\r\\\\n        probe:\\\\r\\\\n          - name: http-cartservice-probe\\\\r\\\\n            type: httpProbe\\\\r\\\\n            mode: Continuous\\\\r\\\\n            runProperties:\\\\r\\\\n              probeTimeout: 500\\\\r\\\\n              retry: 1\\\\r\\\\n              interval: 1\\\\r\\\\n              stopOnFailure: false\\\\r\\\\n            httpProbe\\\\\\/inputs:\\\\r\\\\n              url: http:\\\\\\/\\\\\\/frontend\\\\\\/cart\\\\r\\\\n              method:\\\\r\\\\n                get:\\\\r\\\\n                  criteria: ==\\\\r\\\\n                  responseCode: \\\\\\\"200\\\\\\\"\\\\r\\\\n                  responseTimeout: 15\\\\r\\\\n\\\"\\r\\n                            }\\r\\n                        }\\r\\n                    ]\\r\\n                },\\r\\n                \\\"outputs\\\": {},\\r\\n                \\\"metadata\\\": {\\r\\n                    \\\"labels\\\": {\\r\\n                        \\\"weight\\\": \\\"10\\\"\\r\\n                    }\\r\\n                },\\r\\n                \\\"container\\\": {\\r\\n                    \\\"name\\\": \\\"\\\",\\r\\n                    \\\"image\\\": \\\"chaosnative\\/litmus-checker:2.11.0\\\",\\r\\n                    \\\"args\\\": [\\r\\n                        \\\"-file=\\/tmp\\/chaosengine-pod-delete-ji5.yaml\\\",\\r\\n                        \\\"-saveName=\\/tmp\\/engine-name\\\"\\r\\n                    ],\\r\\n                    \\\"resources\\\": {}\\r\\n                }\\r\\n            }\\r\\n        ],\\r\\n        \\\"entrypoint\\\": \\\"test-0-7-x-exp\\\",\\r\\n        \\\"arguments\\\": {\\r\\n            \\\"parameters\\\": [\\r\\n                {\\r\\n                    \\\"name\\\": \\\"adminModeNamespace\\\",\\r\\n                    \\\"value\\\": \\\"hce\\\"\\r\\n                }\\r\\n            ]\\r\\n        },\\r\\n        \\\"serviceAccountName\\\": \\\"argo-chaos\\\",\\r\\n        \\\"podGC\\\": {\\r\\n            \\\"strategy\\\": \\\"OnWorkflowCompletion\\\"\\r\\n        },\\r\\n        \\\"securityContext\\\": {\\r\\n            \\\"runAsUser\\\": 1000,\\r\\n            \\\"runAsNonRoot\\\": true\\r\\n        }\\r\\n    },\\r\\n    \\\"status\\\": {\\r\\n        \\\"startedAt\\\": null,\\r\\n        \\\"finishedAt\\\": null\\r\\n    }\\r\\n}\",\n    \"cronSyntax\": \"\",\n    \"workflowName\": \"my-pod-delete-experiment\",\n    \"runExperiment\": false,\n    \"workflowDescription\": \"This is a Nginx pod delete experiment\",\n    \"weightages\": [\n      {\n        \"experimentName\": \"pod-delete-ji5\",\n        \"weightage\": 10\n      }\n    ],\n    \"isCustomWorkflow\": true,\n    \"infraID\": \"{{your-infra-id-from-registerInfra-call}}\",\n    \"infraType\": \"Kubernetes\",\n    \"tags\":[\"test\", \"workflow\", \"gke\"]\n  }\n}\n\n\n\n\n\n\n\n\n\n"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateChaosWorkflow",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation UpdateChaosWorkflow(\n  $request: ChaosWorkFlowRequest,\n  $identifiers: IdentifiersRequest!\n) {\n  updateChaosWorkflow(\n    request: $request,\n    identifiers: $identifiers\n  ) {\n    workflowID\n    identifiers {\n      orgIdentifier\n      accountIdentifier\n      projectIdentifier\n    }\n    cronSyntax\n    workflowName\n    workflowDescription\n    isCustomWorkflow\n    tags\n  }\n}",
+                "variables": "{\n   \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\t\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n    \"workflowManifest\": \"{{replace-with-workflow-manifest}}\",\n    \"cronSyntax\": \"\",\n    \"workflowName\": \"{{replace-with-workflow-name}}\",\n    \"workflowDescription\": \"{{replace-with-workflow-description}}\",\n    \"weightages\": [\n      {\n        \"experimentName\": \"{{replace-with-experiment-name}}\",\n        \"weightage\": {{replace-with-experiment-weightage}}\n      }\n    ],\n    \"isCustomWorkflow\": true,\n    \"infraID\": \"{{replace-with-infra-id}}\",\n    \"tags\":[{{replace-with-comma-separated-tags}}]\n  }\n}\n\n\n\n\n\n\n\n\n\n"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RunChaosExperiment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation RunChaosExperiment(\n  $workflowID: String!,\n  $identifiers: IdentifiersRequest!\n) {\n  runChaosExperiment(\n    workflowID: $workflowID,\n    identifiers: $identifiers\n  ) {\n    notifyID\n  }\n}",
+                "variables": "{\n  \"workflowID\": \"{{workflow-id-from-createChaosWorkflow-call}}\",\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\", \n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "StopWorkflowRuns",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation StopWorkflowRuns(\n  $identifiers: IdentifiersRequest!,\n  $workflowID: String!,\n  $workflowRunID: String\n) {\n  stopWorkflowRuns(\n    identifiers: $identifiers,\n    workflowID: $workflowID,\n    workflowRunID: $workflowRunID\n  )\n}",
+                "variables": "{\n  \"workflowID\": \"{{replace-with-workflow-id-to-be-stopped}}\",\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\", \n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteInfras",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation DeleteInfras(\n  $identifiers: IdentifiersRequest!,\n  $infraIDs: [String]!\n) {\n  deleteInfras(\n    identifiers: $identifiers,\n    infraIDs: $infraIDs\n  )\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"infraIDs\": [\"{{infra-id1-to-delete}}\", \"{{infra-id2-to-delete}}\"]\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "queries",
+      "item": [
+        {
+          "name": "GetInfraDetails",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetInfraDetails(\n  $infraID: String!,\n  $identifiers: IdentifiersRequest!\n) {\n  getInfraDetails(\n    infraID: $infraID,\n    identifiers: $identifiers\n  ) {\n    infraID\n    name\n    description\n    tags\n    environmentID\n    platformName\n    isActive\n    isInfraConfirmed\n    isRemoved\n    updatedAt\n    createdAt\n    noOfSchedules\n    noOfWorkflows\n    token\n    infraNamespace\n    serviceAccount\n    infraScope\n    infraNsExists\n    infraSaExists\n    installationType\n    k8sConnectorID\n    lastWorkflowTimestamp\n    startTime\n    version\n    createdBy {\n      userID\n      username\n      email\n    }\n    updatedBy {\n      userID\n      username\n      email\n    }\n  }\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"infraID\": \"{{your-infra-ID}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListInfras",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query ListInfras(\n  $identifiers: IdentifiersRequest!\n  $request: ListInfraRequest\n) {\n  listInfras(identifiers: $identifiers, request: $request) {\n    totalNoOfInfras\n    infras {\n      infraID\n      name\n      description\n      tags\n      environmentID\n      platformName\n      isActive\n      isInfraConfirmed\n      isRemoved\n      updatedAt\n      createdAt\n      noOfSchedules\n      noOfWorkflows\n      token\n      infraNamespace\n      serviceAccount\n      infraScope\n      infraNsExists\n      infraSaExists\n      installationType\n      k8sConnectorID\n      lastWorkflowTimestamp\n      startTime\n      version\n      createdBy {\n        userID\n        username\n        email\n      }\n      updatedBy {\n        userID\n        username\n        email\n      }\n    }\n  }\n}\n",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {}\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetInfraManifest",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetInfraManifest(\n  $infraID: String!,\n  $upgrade: Boolean!,\n  $identifiers: IdentifiersRequest!\n) {\n  getInfraManifest(\n    infraID: $infraID,\n    upgrade: $upgrade,\n    identifiers: $identifiers\n  )\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"upgrade\": false,\n  \"infraID\": \"{{your-infra-ID}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListPredefinedWorkflow",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query ListPredefinedWorkflow(\n  $hubID: String!,\n  $identifiers: IdentifiersRequest!\n) {\n  listPredefinedWorkflow(\n    hubID: $hubID,\n    identifiers: $identifiers\n  ) {\n    workflowName\n    workflowCSV\n    workflowManifest\n  }\n}",
+                "variables": "{\n  \"hubID\": \"6f39cea9-6264-4951-83a8-29976b614289\",\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetPredefinedWorkflow",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetPredefinedWorkflow(\n  $hubID: String!,\n  $experimentName: [String!]!,\n  $identifiers: IdentifiersRequest!\n) {\n  getPredefinedWorkflow(\n    hubID: $hubID,\n    experimentName: $experimentName,\n    identifiers: $identifiers\n  ) {\n    workflowName\n    workflowCSV\n    workflowManifest\n  }\n}",
+                "variables": "{\n  \"hubID\": \"6f39cea9-6264-4951-83a8-29976b614289\",\n  \"experimentName\": {{replace-with-experiment-name-to-fetch}},\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetPredefinedExperimentYAML",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetPredefinedExperimentYAML(\n  $request: ExperimentRequest!,\n  $identifiers: IdentifiersRequest!\n) {\n  getPredefinedExperimentYAML(\n    request: $request,\n    identifiers: $identifiers\n  )\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n      \"chartName\": \"{{replace-with-chart-being-used}}\",\n      \"experimentName\": \"{{replace-with-name-of-the-experiment}}\",\n      \"hubID\": \"6f39cea9-6264-4951-83a8-29976b614289\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListWorkflowRun",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query ListWorkflowRun(\n  $identifiers: IdentifiersRequest!,\n  $request: ListWorkflowRunRequest!\n) {\n  listWorkflowRun(\n    identifiers: $identifiers,\n    request: $request\n  ) {\n    totalNoOfWorkflowRuns\n    workflowRuns {\n      identifiers {\n          orgIdentifier\n          projectIdentifier\n          accountIdentifier\n      }\n      workflowRunID\n      workflowID\n      weightages {\n        experimentName\n        weightage\n      }\n      updatedAt\n      createdAt\n      infra {\n        infraID\n        infraNamespace\n        infraScope\n        isActive\n        isInfraConfirmed\n      }\n      workflowName\n      workflowManifest\n      phase\n      resiliencyScore\n      experimentsPassed\n      experimentsFailed\n      experimentsAwaited\n      experimentsStopped\n      experimentsNa\n      totalExperiments\n      executionData\n      isRemoved\n      updatedBy {\n        userID\n        username\n      }\n      createdBy {\n        username\n        userID\n      }\n    }\n  }\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\", \n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n      \"notifyIDs\": [\"{{comma-separated-notifyIDs-from-runChaosExperiment-api-call}}\"]\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetYAMLData",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetYAMLData(\n  $request: ExperimentRequest!,\n  $identifiers: IdentifiersRequest!\n) {\n  getYAMLData(\n    request: $request,\n    identifiers: $identifiers\n  )\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\", \n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n      \"chartName\": \"{{replace-with-chart-being-used}}\",\n      \"experimentName\": \"{{replace-with-name-of-the-experiment}}\",\n      \"hubID\": \"6f39cea9-6264-4951-83a8-29976b614289\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListWorkflow",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query ListWorkflow(\n  $identifiers: IdentifiersRequest!,\n  $request: ListWorkflowRequest!\n) {\n  listWorkflow(\n    identifiers: $identifiers,\n    request: $request\n  ) {\n    totalNoOfWorkflows\n    workflows {\n      identifiers {\n        orgIdentifier\n        accountIdentifier\n        projectIdentifier\n      }\n      workflowID\n      workflowManifest\n      cronSyntax\n      name\n      description\n      weightages {\n        experimentName\n        weightage\n      }\n      isCustomWorkflow\n      updatedAt\n      createdAt\n      infra {\n        infraID\n        name\n        description\n        tags\n        environmentID\n        platformName\n        isActive\n        isInfraConfirmed\n        isRemoved\n        updatedAt\n        createdAt\n        noOfSchedules\n        noOfWorkflows\n        token\n        infraNamespace\n        serviceAccount\n        infraScope\n        infraNsExists\n        infraSaExists\n        installationType\n        k8sConnectorID\n        lastWorkflowTimestamp\n        startTime\n        version\n        createdBy {\n          userID\n          username\n          email\n        }\n        updatedBy {\n          userID\n          username\n          email\n        }\n      }\n      isRemoved\n      tags\n      createdBy {\n        userID\n        username\n        email\n      }\n      avgResiliencyScore\n      percentageChange\n      lastWfRunDetails {\n        identifiers {\n          orgIdentifier\n          accountIdentifier\n          projectIdentifier\n        }\n        workflowRunID\n        workflowID\n        weightages {\n          experimentName\n          weightage\n        }\n        updatedAt\n        createdAt\n        infra {\n          infraID\n          name\n          description\n          tags\n          environmentID\n          platformName\n          isActive\n          isInfraConfirmed\n          isRemoved\n          updatedAt\n          createdAt\n          noOfSchedules\n          noOfWorkflows\n          token\n          infraNamespace\n          serviceAccount\n          infraScope\n          infraNsExists\n          infraSaExists\n          installationType\n          k8sConnectorID\n          lastWorkflowTimestamp\n          startTime\n          version\n          createdBy {\n            userID\n            username\n            email\n          }\n          updatedBy {\n            userID\n            username\n            email\n          }\n        }\n        workflowName\n        phase\n        resiliencyScore\n        experimentsPassed\n        experimentsFailed\n        experimentsAwaited\n        experimentsStopped\n        experimentsNa\n        totalExperiments\n        executionData\n        isRemoved\n        updatedBy {\n          userID\n          username\n          email\n        }\n        createdBy {\n          userID\n          username\n          email\n        }\n      }\n      updatedBy {\n        userID\n        username\n        email\n      }\n    }\n  }\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\", \n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {}\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListChaosHub",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query ListChaosHub(\n  $identifiers: IdentifiersRequest!,\n  $request: ListChaosHubRequest\n) {\n  listChaosHub(\n    identifiers: $identifiers,\n    request: $request\n  ) {\n    id\n    repoName\n    repoURL\n    repoBranch\n    connectorId\n    connectorScope\n    AuthType\n    isAvailable\n    totalExp\n    totalWorkflows\n    name\n    lastSyncedAt\n    isDefault\n    tags\n    createdBy {\n      userID\n      username\n      email\n    }\n    updatedBy {\n      userID\n      username\n      email\n    }\n    createdAt\n    updatedAt\n    description\n  }\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\", \n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {}\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListChart",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query ListChart(\n  $hubID: String!,\n  $identifiers: IdentifiersRequest!\n) {\n  listChart(\n    hubID: $hubID,\n    identifiers: $identifiers\n  ) {\n    apiVersion\n    kind\n    metadata {\n      name\n      version\n      annotations {\n        categories\n        vendor\n        createdAt\n        repository\n        support\n        chartDescription\n      }\n    }\n    spec {\n      displayName\n      categoryDescription\n      keywords\n      maturity\n      maintainers {\n        name\n        email\n      }\n      minKubeVersion\n      provider {\n        name\n      }\n      links {\n        name\n        url\n      }\n      faults {\n        name\n        displayName\n        description\n      }\n      experiments\n      chaosExpCRDLink\n      platforms\n      chaosType\n    }\n    packageInfo {\n      packageName\n      experiments {\n        name\n        CSV\n        desc\n      }\n    }\n  }\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\", \n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"hubID\": \"6f39cea9-6264-4951-83a8-29976b614289\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetHubExperiment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetHubExperiment(\n  $request: ExperimentRequest!,\n  $identifiers: IdentifiersRequest!\n) {\n  getHubExperiment(\n    request: $request,\n    identifiers: $identifiers\n  ) {\n    apiVersion\n    kind\n    metadata {\n      name\n      version\n      annotations {\n        categories\n        vendor\n        createdAt\n        repository\n        support\n        chartDescription\n      }\n    }\n    spec {\n      displayName\n      categoryDescription\n      keywords\n      maturity\n      maintainers {\n        name\n        email\n      }\n      minKubeVersion\n      provider {\n        name\n      }\n      links {\n        name\n        url\n      }\n      faults {\n        name\n        displayName\n        description\n      }\n      experiments\n      chaosExpCRDLink\n      platforms\n      chaosType\n    }\n    packageInfo {\n      packageName\n      experiments {\n        name\n        CSV\n        desc\n      }\n    }\n  }\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\", \n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n      \"chartName\": \"{{replace-with-chart-being-used}}\",\n      \"experimentName\": \"{{replace-with-name-of-the-experiment}}\",\n      \"hubID\": \"6f39cea9-6264-4951-83a8-29976b614289\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Run Pod Delete Chaos Experiment",
+      "item": [
+        {
+          "name": "RegisterInfra",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($identifiers: IdentifiersRequest!, $request: RegisterInfraRequest!) {\n  registerInfra(identifiers: $identifiers, request: $request) {\n    token\n    infraID\n    name\n    manifest\n  }\n}\n",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n    \"name\": \"my-test-chaos-infra\",\n    \"environmentID\": \"my-test-chaos-env\",\n    \"description\": \"Test Chaos Environment\",\n    \"platformName\": \"my-test-platform\",\n    \"infraNamespace\": \"hce\",\n    \"serviceAccount\": \"hce\",\n    \"infraScope\": \"cluster\",\n    \"infraNsExists\": false,\n    \"infraSaExists\": false,\n    \"installationType\": \"MANIFEST\",\n    \"skipSsl\": false\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetInfraDetails (Optional))",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetInfraDetails(\n  $infraID: String!,\n  $identifiers: IdentifiersRequest!\n) {\n  getInfraDetails(\n    infraID: $infraID,\n    identifiers: $identifiers\n  ) {\n    infraID\n    name\n    description\n    tags\n    environmentID\n    platformName\n    isActive\n    isInfraConfirmed\n    isRemoved\n    updatedAt\n    createdAt\n    noOfSchedules\n    noOfWorkflows\n    token\n    infraNamespace\n    serviceAccount\n    infraScope\n    infraNsExists\n    infraSaExists\n    installationType\n    k8sConnectorID\n    lastWorkflowTimestamp\n    startTime\n    version\n    createdBy {\n      userID\n      username\n      email\n    }\n    updatedBy {\n      userID\n      username\n      email\n    }\n  }\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"infraID\": \"{{your-infra-ID}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListPredefinedWorkflow (Optional)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query ListPredefinedWorkflow(\n  $hubID: String!,\n  $identifiers: IdentifiersRequest!\n) {\n  listPredefinedWorkflow(\n    hubID: $hubID,\n    identifiers: $identifiers\n  ) {\n    workflowName\n    workflowCSV\n    workflowManifest\n  }\n}",
+                "variables": "{\n  \"hubID\": \"6f39cea9-6264-4951-83a8-29976b614289\",\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateChaosWorkFlow",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{API-KEY-TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation CreateChaosWorkFlow(\n  $request: ChaosWorkFlowRequest!\n  $identifiers: IdentifiersRequest!\n) {\n  createChaosWorkFlow(request: $request, identifiers: $identifiers) {\n    workflowID\n    cronSyntax\n    workflowName\n    workflowDescription\n    isCustomWorkflow\n    tags\n  }\n}\n",
+                "variables": "{\n   \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\",\t\n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n    \"workflowManifest\": \"{\\r\\n    \\\"kind\\\": \\\"Workflow\\\",\\r\\n    \\\"apiVersion\\\": \\\"argoproj.io\\/v1alpha1\\\",\\r\\n    \\\"metadata\\\": {\\r\\n        \\\"name\\\": \\\"my-pod-delete-experiment\\\",\\r\\n        \\\"namespace\\\": \\\"hce\\\",\\r\\n        \\\"creationTimestamp\\\": null,\\r\\n        \\\"labels\\\": {\\r\\n            \\\"infra_id\\\": \\\"e640346b-bff5-40db-a828-68b44e06e2d1\\\",\\r\\n            \\\"revision_id\\\": \\\"f82e8c99-8efd-4289-a324-eadfd9667574\\\",\\r\\n            \\\"workflow_id\\\": \\\"80557c8b-531c-49d2-a39e-9f72c4674c2c\\\",\\r\\n            \\\"workflows.argoproj.io\\/controller-instanceid\\\": \\\"e640346b-bff5-40db-a828-68b44e06e2d1\\\"\\r\\n        }\\r\\n    },\\r\\n    \\\"spec\\\": {\\r\\n        \\\"templates\\\": [\\r\\n            {\\r\\n                \\\"name\\\": \\\"test-0-7-x-exp\\\",\\r\\n                \\\"inputs\\\": {},\\r\\n                \\\"outputs\\\": {},\\r\\n                \\\"metadata\\\": {},\\r\\n                \\\"steps\\\": [\\r\\n                    [\\r\\n                        {\\r\\n                            \\\"name\\\": \\\"install-chaos-faults\\\",\\r\\n                            \\\"template\\\": \\\"install-chaos-faults\\\",\\r\\n                            \\\"arguments\\\": {}\\r\\n                        }\\r\\n                    ],\\r\\n                    [\\r\\n                        {\\r\\n                            \\\"name\\\": \\\"pod-delete-ji5\\\",\\r\\n                            \\\"template\\\": \\\"pod-delete-ji5\\\",\\r\\n                            \\\"arguments\\\": {}\\r\\n                        }\\r\\n                    ],\\r\\n                    [\\r\\n                        {\\r\\n                            \\\"name\\\": \\\"cleanup-chaos-resources\\\",\\r\\n                            \\\"template\\\": \\\"cleanup-chaos-resources\\\",\\r\\n                            \\\"arguments\\\": {}\\r\\n                        }\\r\\n                    ]\\r\\n                ]\\r\\n            },\\r\\n            {\\r\\n                \\\"name\\\": \\\"install-chaos-faults\\\",\\r\\n                \\\"inputs\\\": {\\r\\n                    \\\"artifacts\\\": [\\r\\n                        {\\r\\n                            \\\"name\\\": \\\"pod-delete-ji5\\\",\\r\\n                            \\\"path\\\": \\\"\\/tmp\\/pod-delete-ji5.yaml\\\",\\r\\n                            \\\"raw\\\": {\\r\\n                                \\\"data\\\": \\\"apiVersion: litmuschaos.io\\/v1alpha1\\\\ndescription:\\\\n  message: |\\\\n    Deletes a pod belonging to a deployment\\/statefulset\\/daemonset\\\\nkind: ChaosExperiment\\\\nmetadata:\\\\n  name: pod-delete\\\\n  labels:\\\\n    name: pod-delete\\\\n    app.kubernetes.io\\/part-of: litmus\\\\n    app.kubernetes.io\\/component: chaosexperiment\\\\n    app.kubernetes.io\\/version: ci\\\\nspec:\\\\n  definition:\\\\n    scope: Namespaced\\\\n    permissions:\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - pods\\\\n        verbs:\\\\n          - create\\\\n          - delete\\\\n          - get\\\\n          - list\\\\n          - patch\\\\n          - update\\\\n          - deletecollection\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - events\\\\n        verbs:\\\\n          - create\\\\n          - get\\\\n          - list\\\\n          - patch\\\\n          - update\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - configmaps\\\\n        verbs:\\\\n          - get\\\\n          - list\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - pods\\/log\\\\n        verbs:\\\\n          - get\\\\n          - list\\\\n          - watch\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - pods\\/exec\\\\n        verbs:\\\\n          - get\\\\n          - list\\\\n          - create\\\\n      - apiGroups:\\\\n          - apps\\\\n        resources:\\\\n          - deployments\\\\n          - statefulsets\\\\n          - replicasets\\\\n          - daemonsets\\\\n        verbs:\\\\n          - list\\\\n          - get\\\\n      - apiGroups:\\\\n          - apps.openshift.io\\\\n        resources:\\\\n          - deploymentconfigs\\\\n        verbs:\\\\n          - list\\\\n          - get\\\\n      - apiGroups:\\\\n          - \\\\\\\"\\\\\\\"\\\\n        resources:\\\\n          - replicationcontrollers\\\\n        verbs:\\\\n          - get\\\\n          - list\\\\n      - apiGroups:\\\\n          - argoproj.io\\\\n        resources:\\\\n          - rollouts\\\\n        verbs:\\\\n          - list\\\\n          - get\\\\n      - apiGroups:\\\\n          - batch\\\\n        resources:\\\\n          - jobs\\\\n        verbs:\\\\n          - create\\\\n          - list\\\\n          - get\\\\n          - delete\\\\n          - deletecollection\\\\n      - apiGroups:\\\\n          - litmuschaos.io\\\\n        resources:\\\\n          - chaosengines\\\\n          - chaosexperiments\\\\n          - chaosresults\\\\n        verbs:\\\\n          - create\\\\n          - list\\\\n          - get\\\\n          - patch\\\\n          - update\\\\n          - delete\\\\n    image: chaosnative\\/go-runner:3.0.0-saas\\\\n    imagePullPolicy: Always\\\\n    args:\\\\n      - -c\\\\n      - .\\/experiments -name pod-delete\\\\n    command:\\\\n      - \\/bin\\/bash\\\\n    env:\\\\n      - name: TOTAL_CHAOS_DURATION\\\\n        value: \\\\\\\"15\\\\\\\"\\\\n      - name: RAMP_TIME\\\\n        value: \\\\\\\"\\\\\\\"\\\\n      - name: FORCE\\\\n        value: \\\\\\\"true\\\\\\\"\\\\n      - name: CHAOS_INTERVAL\\\\n        value: \\\\\\\"5\\\\\\\"\\\\n      - name: PODS_AFFECTED_PERC\\\\n        value: \\\\\\\"\\\\\\\"\\\\n      - name: TARGET_CONTAINER\\\\n        value: \\\\\\\"\\\\\\\"\\\\n      - name: TARGET_PODS\\\\n        value: \\\\\\\"\\\\\\\"\\\\n      - name: DEFAULT_HEALTH_CHECK\\\\n        value: \\\\\\\"false\\\\\\\"\\\\n      - name: NODE_LABEL\\\\n        value: \\\\\\\"\\\\\\\"\\\\n      - name: SEQUENCE\\\\n        value: parallel\\\\n    labels:\\\\n      name: pod-delete\\\\n      app.kubernetes.io\\/part-of: litmus\\\\n      app.kubernetes.io\\/component: experiment-job\\\\n      app.kubernetes.io\\/version: ci\\\\n\\\"\\r\\n                            }\\r\\n                        }\\r\\n                    ]\\r\\n                },\\r\\n                \\\"outputs\\\": {},\\r\\n                \\\"metadata\\\": {},\\r\\n                \\\"container\\\": {\\r\\n                    \\\"name\\\": \\\"\\\",\\r\\n                    \\\"image\\\": \\\"chaosnative\\/k8s:2.11.0\\\",\\r\\n                    \\\"command\\\": [\\r\\n                        \\\"sh\\\",\\r\\n                        \\\"-c\\\"\\r\\n                    ],\\r\\n                    \\\"args\\\": [\\r\\n                        \\\"kubectl apply -f \\/tmp\\/ -n {{workflow.parameters.adminModeNamespace}} && sleep 30\\\"\\r\\n                    ],\\r\\n                    \\\"resources\\\": {}\\r\\n                }\\r\\n            },\\r\\n            {\\r\\n                \\\"name\\\": \\\"cleanup-chaos-resources\\\",\\r\\n                \\\"inputs\\\": {},\\r\\n                \\\"outputs\\\": {},\\r\\n                \\\"metadata\\\": {},\\r\\n                \\\"container\\\": {\\r\\n                    \\\"name\\\": \\\"\\\",\\r\\n                    \\\"image\\\": \\\"chaosnative\\/k8s:2.11.0\\\",\\r\\n                    \\\"command\\\": [\\r\\n                        \\\"sh\\\",\\r\\n                        \\\"-c\\\"\\r\\n                    ],\\r\\n                    \\\"args\\\": [\\r\\n                        \\\"kubectl delete chaosengine -l workflow_run_id={{workflow.uid}} -n {{workflow.parameters.adminModeNamespace}}\\\"\\r\\n                    ],\\r\\n                    \\\"resources\\\": {}\\r\\n                }\\r\\n            },\\r\\n            {\\r\\n                \\\"name\\\": \\\"pod-delete-ji5\\\",\\r\\n                \\\"inputs\\\": {\\r\\n                    \\\"artifacts\\\": [\\r\\n                        {\\r\\n                            \\\"name\\\": \\\"pod-delete-ji5\\\",\\r\\n                            \\\"path\\\": \\\"\\/tmp\\/chaosengine-pod-delete-ji5.yaml\\\",\\r\\n                            \\\"raw\\\": {\\r\\n                                \\\"data\\\": \\\"apiVersion: litmuschaos.io\\\\\\/v1alpha1\\\\r\\\\nkind: ChaosEngine\\\\r\\\\nmetadata:\\\\r\\\\n  namespace: \\\\\\\"{{workflow.parameters.adminModeNamespace}}\\\\\\\"\\\\r\\\\n  generateName: pod-delete-ji5\\\\r\\\\n  labels:\\\\r\\\\n    workflow_run_id: \\\\\\\"{{ workflow.uid }}\\\\\\\"\\\\r\\\\n    workflow_name: my-pod-delete-experiment\\\\r\\\\nspec:\\\\r\\\\n  appinfo:\\\\r\\\\n    appns: hce\\\\r\\\\n    applabel: app=cartservice\\\\r\\\\n    appkind: deployment\\\\r\\\\n  engineState: active\\\\r\\\\n  chaosServiceAccount: litmus-admin\\\\r\\\\n  experiments:\\\\r\\\\n    - name: pod-delete\\\\r\\\\n      spec:\\\\r\\\\n        components:\\\\r\\\\n          env:\\\\r\\\\n            - name: TOTAL_CHAOS_DURATION\\\\r\\\\n              value: \\\\\\\"30\\\\\\\"\\\\r\\\\n            - name: CHAOS_INTERVAL\\\\r\\\\n              value: \\\\\\\"10\\\\\\\"\\\\r\\\\n            - name: FORCE\\\\r\\\\n              value: \\\\\\\"false\\\\\\\"\\\\r\\\\n            - name: PODS_AFFECTED_PERC\\\\r\\\\n              value: \\\\\\\"\\\\\\\"\\\\r\\\\n        probe:\\\\r\\\\n          - name: http-cartservice-probe\\\\r\\\\n            type: httpProbe\\\\r\\\\n            mode: Continuous\\\\r\\\\n            runProperties:\\\\r\\\\n              probeTimeout: 500\\\\r\\\\n              retry: 1\\\\r\\\\n              interval: 1\\\\r\\\\n              stopOnFailure: false\\\\r\\\\n            httpProbe\\\\\\/inputs:\\\\r\\\\n              url: http:\\\\\\/\\\\\\/frontend\\\\\\/cart\\\\r\\\\n              method:\\\\r\\\\n                get:\\\\r\\\\n                  criteria: ==\\\\r\\\\n                  responseCode: \\\\\\\"200\\\\\\\"\\\\r\\\\n                  responseTimeout: 15\\\\r\\\\n\\\"\\r\\n                            }\\r\\n                        }\\r\\n                    ]\\r\\n                },\\r\\n                \\\"outputs\\\": {},\\r\\n                \\\"metadata\\\": {\\r\\n                    \\\"labels\\\": {\\r\\n                        \\\"weight\\\": \\\"10\\\"\\r\\n                    }\\r\\n                },\\r\\n                \\\"container\\\": {\\r\\n                    \\\"name\\\": \\\"\\\",\\r\\n                    \\\"image\\\": \\\"chaosnative\\/litmus-checker:2.11.0\\\",\\r\\n                    \\\"args\\\": [\\r\\n                        \\\"-file=\\/tmp\\/chaosengine-pod-delete-ji5.yaml\\\",\\r\\n                        \\\"-saveName=\\/tmp\\/engine-name\\\"\\r\\n                    ],\\r\\n                    \\\"resources\\\": {}\\r\\n                }\\r\\n            }\\r\\n        ],\\r\\n        \\\"entrypoint\\\": \\\"test-0-7-x-exp\\\",\\r\\n        \\\"arguments\\\": {\\r\\n            \\\"parameters\\\": [\\r\\n                {\\r\\n                    \\\"name\\\": \\\"adminModeNamespace\\\",\\r\\n                    \\\"value\\\": \\\"hce\\\"\\r\\n                }\\r\\n            ]\\r\\n        },\\r\\n        \\\"serviceAccountName\\\": \\\"argo-chaos\\\",\\r\\n        \\\"podGC\\\": {\\r\\n            \\\"strategy\\\": \\\"OnWorkflowCompletion\\\"\\r\\n        },\\r\\n        \\\"securityContext\\\": {\\r\\n            \\\"runAsUser\\\": 1000,\\r\\n            \\\"runAsNonRoot\\\": true\\r\\n        }\\r\\n    },\\r\\n    \\\"status\\\": {\\r\\n        \\\"startedAt\\\": null,\\r\\n        \\\"finishedAt\\\": null\\r\\n    }\\r\\n}\",\n    \"cronSyntax\": \"\",\n    \"workflowName\": \"my-pod-delete-experiment\",\n    \"runExperiment\": false,\n    \"workflowDescription\": \"This is a pod delete experiment\",\n    \"weightages\": [\n      {\n        \"experimentName\": \"pod-delete-ji5\",\n        \"weightage\": 10\n      }\n    ],\n    \"isCustomWorkflow\": true,\n    \"infraID\": \"{{your-infra-id-from-registerInfra-call}}\",\n    \"infraType\": \"Kubernetes\",\n    \"tags\":[\"test\", \"workflow\", \"gke\"]\n  }\n}\n\n\n\n\n\n\n\n\n\n"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RunChaosExperiment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation RunChaosExperiment(\n  $workflowID: String!,\n  $identifiers: IdentifiersRequest!\n) {\n  runChaosExperiment(\n    workflowID: $workflowID,\n    identifiers: $identifiers\n  ) {\n    notifyID\n  }\n}",
+                "variables": "{\n  \"workflowID\": \"{{workflow-id-from-createChaosWorkflow-call}}\",\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\", \n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListWorkflowRun (Optional))",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query ListWorkflowRun(\n  $identifiers: IdentifiersRequest!,\n  $request: ListWorkflowRunRequest!\n) {\n  listWorkflowRun(\n    identifiers: $identifiers,\n    request: $request\n  ) {\n    totalNoOfWorkflowRuns\n    workflowRuns {\n      identifiers {\n          orgIdentifier\n          projectIdentifier\n          accountIdentifier\n      }\n      workflowRunID\n      workflowID\n      weightages {\n        experimentName\n        weightage\n      }\n      updatedAt\n      createdAt\n      infra {\n        infraID\n        infraNamespace\n        infraScope\n        isActive\n        isInfraConfirmed\n      }\n      workflowName\n      workflowManifest\n      phase\n      resiliencyScore\n      experimentsPassed\n      experimentsFailed\n      experimentsAwaited\n      experimentsStopped\n      experimentsNa\n      totalExperiments\n      executionData\n      isRemoved\n      updatedBy {\n        userID\n        username\n      }\n      createdBy {\n        username\n        userID\n      }\n    }\n  }\n}",
+                "variables": "{\n  \"identifiers\": {\n    \"orgIdentifier\": \"{{org_id}}\", \n    \"accountIdentifier\": \"{{account_id}}\",\n    \"projectIdentifier\": \"{{project_id}}\"\n  },\n  \"request\": {\n      \"notifyIDs\": [\"{{comma-separated-notifyIDs-from-runChaosExperiment-api-call}}\"]\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{chaos_url}}?accountIdentifier={{account_id}}",
+              "host": ["{{chaos_url}}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Please follow the below guidelines to run a sample Chaos experiment such as _**Pod Delete**_:\n\nSequence in which the APIs should be executed to run a sample chaos experiment such as _**Pod Delete**_ (all the APIs to do so are present in folder \"**Run Pod Delete Chaos Experiment**\" as well) -\n\nListed below are the required inputs and how to access (or generate) them. We will refer these variables in the API requests explained in this tutorial -\n\n1\\. **url**\n\nThis is the Harness CE server URL serving the Chaos API requests.\n\nYou can find this URL in the Chaos API doc(\\`top right\\`).For instance, [https://app.harness.io/gateway/chaos/manager/api/query](https://app.harness.io/gateway/chaos/manager/api/query) is the Harness CE server URL for production environment.If you are using \\[Chaos postman collection\\]([https://elements.getpostman.com/redirect?entityId=25469526-59b35825-6240-4b45-9974-6bb869741318&entityType=collection](https://elements.getpostman.com/redirect?entityId=25469526-59b35825-6240-4b45-9974-6bb869741318&entityType=collection)), this value will be pre-filled in 2 postman variables like below:  \n\\`\\`\\`\n\nbase_url - [https://app.harness.io](https://app.harness.iochaos_url)\n\nchaos_url - {{base_url}}/gateway/chaos/manager/api/query\n\n\\`\\`\\`\n\n2\\. **account_id**\n\nThis is your Harness account Id. Please use the account where you would like to run Chaos experiments.\n\nYou can retrieve your account Id by following the below steps:\n\n- Go to \\`ACCOUNT SETTINGS\\` in \\[Harness\\]([https://app.harness.io/).](https://app.harness.io/).2)\n- Click on \\`Overview\\`.\n- Copy the value of \\`Account Id\\`.\n    \n\n3\\. **project_id**\n\nThis is your Harness project Id. Please use the project where you would like to run Chaos experiments.\n\nYou can retrieve your project Id by following the below steps:\n\n- Go to \\`Projects\\` in \\[Harness\\]([https://app.harness.io/).](https://app.harness.io/).\n- Select the project where you would like to run the Chaos experiments or create a new project.\n- Click on \\`Overview\\`.\n- Copy the value of \\`Id\\`.\n- Please make sure to copy the value of \\`Organization\\` as well, this will be the value of next required variable \\`org_id\\`.\n    \n\n4\\. **org_id**\n\nThis is your Harness organization Id. Please use the organization where you would like to run Chaos experiments.\n\nYou can retrieve your organization Id by following the below steps:\n\n**See above step to retrieve project_id - you would have copied the value of org_id as well in that step, if not please follow the same steps again to retrieve organization Id**\n\n5\\. **API-KEY-TOKEN**\n\nYou can use an existing Harness API key token of the same Harness account selected in above steps or you can create a new one by following the below steps:\n\n- Click on \\`MY PROFILE\\` in \\[Harness\\]([https://app.harness.io/).](https://app.harness.io/).2)\n- Go to \\`My API Keys\\` section and click on \\`+ API Key\\` button to create a new API Key.\n- Enter a \\`Name\\` for the API Key(optional Description/Tags) and click on \\`Save\\`.\n- Under the newly created API Key, click on \\`+ Token\\` button to generate a new token for this API Key.\n- Enter the \\`Name\\` and select the \\`Expiration\\`(time for which this token will be valid) and click on \\`Generate Token\\`.\n- Please make sure to copy the value of the token generated and store somewhere safe, you may not be able to copy this later.\n    \n\n1. _**RegisterInfra**_ - Register your Infra where you want to run chaos experiments i.e., your kubernetes cluster, etc.  \n    \\- `Retrieve the infra manifest by forming the URL like chaos_server_url/file/token.yaml, example url could be` [https://app.harness.io/gateway/chaos/manager/api/file/token.yaml](https://app.harness.io/gateway/chaos/manager/api/file/token.yaml) where token is the value of token retrieved after running `RegisterInfra` API.  \n    \\- `Apply the manifest/.yaml file on your infra such as k8s cluster, some machine, etc.`  \n    \\- `Required Inputs to be modified - no input needs to be modified.`\\- `Note down the infra ID received in response.`\n2. _**GetInfraDetails**_ (_**Optional**_ - required only if you want to get the details of your newly registered infra or to check if your infra is active or not before creating a Chaos workflow) - It will return the details of a given infra based on infra ID input.\n3. _**ListPredefinedWorkflow**_ (_**Optional**_ - required only if you want to run a different chaos experiment other than pod-delete ---- by default --- pod delete experiment manifest is present in CreateChaosWorkFlow api call) - This will list down all the available predefined workflows/experiments that can be run on your infra, please select one of them and copy the manifest from there and make necessary changes such as namespace, etc.  \n    `Required Inputs to be modified - no input needs to be modified.`\n4. apiVersion: apps/v1kind: Deploymentmetadata:name: nginx-deploymentnamespace: hcespec:selector: matchLabels: app: cartservicereplicas: 2 # tells deployment to run 2 pods matching the templatetemplate: metadata: labels: app: cartservice spec: containers: - name: nginx image: nginx:1.14.2 ports: - containerPort: 80\n5. _**RunChaosExperiment**_ - Once a workflow is created, you can now execute the experiment by providing the workflow id from step3.  \n    `Required Inputs to be modified - workflowID - provide the id of workflow created and retrieved in response of` _**CreateChaosWorkFlow API call.**_\n6. _**ListWorkflowRun (Optional -**_ required only if you want to check the details of the workflow currently running - details can be validated by UI as well if user prefers to do so**) -** It will list down all the workflow runs with the required details for those workflows, this API call can be used to validate if the workflow created by RunChaosExperiment API call is running or not, completed, etc using the field \\`_**phase__**__\\`_**.**_**Once these steps are executed, user can go and check their cluster/hce namespace, experiments will start running there**_."
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "value",
+        "value": "{{API-KEY-TOKEN}}",
+        "type": "string"
+      },
+      {
+        "key": "key",
+        "value": "x-api-key",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "account_id",
+      "value": "$my-account-id",
+      "type": "string"
+    },
+    {
+      "key": "project_id",
+      "value": "$my-project-id",
+      "type": "string"
+    },
+    {
+      "key": "API-KEY-TOKEN",
+      "value": "$your-api-key-token",
+      "type": "string"
+    },
+    {
+      "key": "org_id",
+      "value": "default",
+      "type": "string"
+    },
+    {
+      "key": "base_url",
+      "value": "https://app.harness.io",
+      "type": "string"
+    },
+    {
+      "key": "chaos_url",
+      "value": "{{base_url}}/gateway/chaos/manager/api/query",
+      "type": "string"
+    }
+  ]
+}

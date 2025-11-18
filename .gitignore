@@ -1,0 +1,10 @@
+# .gitignore
+# Postman
+*.postman_globals.json
+*.postman_environment.json
+!postman/environments/*.template.json
+.env
+.env.*
+!.env.example
+node_modules/
+.DS_Store

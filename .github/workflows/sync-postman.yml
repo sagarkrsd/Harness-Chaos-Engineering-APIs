@@ -1,0 +1,46 @@
+name: Sync Postman Collections
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'postman/collections/**'
+      - 'postman/environments/**'
+  pull_request:
+    branches: [main]
+
+jobs:
+  sync-postman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install Newman and Postman CLI
+        run: |
+          npm install -g newman @postmanlabs/newman
+          npm install -g @postmanlabs/ctl
+
+      - name: Sync to Postman
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+        run: |
+          # Install Postman CLI if not using the GitHub Action
+          # npm install -g @postmanlabs/ctl
+
+          # Login to Postman
+          pm login --key $POSTMAN_API_KEY
+
+          # Sync collections
+          for collection in postman/collections/*.json; do
+            pm collection sync "$collection" --workspace YOUR_WORKSPACE_ID
+          done
+
+          # Sync environments
+          for env in postman/environments/*.json; do
+            pm environment sync "$env" --workspace YOUR_WORKSPACE_ID
+          done

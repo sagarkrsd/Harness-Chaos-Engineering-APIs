@@ -1,0 +1,749 @@
+{
+  "info": {
+    "_postman_id": "876f9181-71f7-4377-acc9-0ae07d9a60fa",
+    "name": "Harness Platform APIs - Chaos Onboarding",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25469526",
+    "_collection_link": "https://www.postman.com/harness-chaos-engineering/workspace/harness-chaos-engineering-public/collection/25469526-876f9181-71f7-4377-acc9-0ae07d9a60fa?action=share&source=collection_link&creator=25469526"
+  },
+  "item": [
+    {
+      "name": "organizations",
+      "item": [
+        {
+          "name": "List Organizations by filter",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ng/api/organizations?accountIdentifier={{account_id}}&pageIndex=0&pageSize=50&sortOrders=fieldName%3Dstring%26orderType%3DASC",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "organizations"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                },
+                {
+                  "key": "identifiers",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "searchTerm",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "pageIndex",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "50"
+                },
+                {
+                  "key": "sortOrders",
+                  "value": "fieldName%3Dstring%26orderType%3DASC"
+                },
+                {
+                  "key": "pageToken",
+                  "value": "string",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create an Organization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"organization\": {\n        \"identifier\": \"{{org_id}}\",\n        \"name\": \"{{org_name}}\",\n        \"description\": \"A test org created via postman collection.\",\n        \"tags\": {}\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/ng/api/organizations?accountIdentifier={{account_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "organizations"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Organization details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ng/api/organizations/{identifier}?accountIdentifier={{account_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "organizations", "{identifier}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete an Organization",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "If-Match",
+                "value": "string"
+              },
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ng/api/organizations/{identifier}?accountIdentifier={{account_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "organizations", "{identifier}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "projects",
+      "item": [
+        {
+          "name": "List all Projects for a user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ng/api/projects?accountIdentifier={{account_id}}&orgIdentifier={{org_id}}&hasModule=true&identifiers=string&moduleType=CD&searchTerm=string&onlyFavorites=false&pageIndex=0&pageSize=50&sortOrders=fieldName%3Dstring%26orderType%3DASC&pageToken=string",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "projects"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                },
+                {
+                  "key": "orgIdentifier",
+                  "value": "{{org_id}}"
+                },
+                {
+                  "key": "hasModule",
+                  "value": "true"
+                },
+                {
+                  "key": "identifiers",
+                  "value": "string"
+                },
+                {
+                  "key": "moduleType",
+                  "value": "CD"
+                },
+                {
+                  "key": "searchTerm",
+                  "value": "string"
+                },
+                {
+                  "key": "onlyFavorites",
+                  "value": "false"
+                },
+                {
+                  "key": "pageIndex",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "50"
+                },
+                {
+                  "key": "sortOrders",
+                  "value": "fieldName%3Dstring%26orderType%3DASC"
+                },
+                {
+                  "key": "pageToken",
+                  "value": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"project\": {\n        \"orgIdentifier\": \"{{org_id}}\",\n        \"identifier\": \"{{project_id}}\",\n        \"name\": \"{{project_name}}\",\n        \"modules\": [\n            \"CHAOS\"\n        ],\n        \"description\": \"A test project created via postman collection.\",\n        \"tags\": {}\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/ng/api/projects?accountIdentifier={{account_id}}&orgIdentifier={{org_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "projects"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                },
+                {
+                  "key": "orgIdentifier",
+                  "value": "{{org_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Project details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ng/api/projects/{identifier}?accountIdentifier={{account_id}}&orgIdentifier={{org_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "projects", "{identifier}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                },
+                {
+                  "key": "orgIdentifier",
+                  "value": "{{org_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a Project",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "If-Match",
+                "value": "string"
+              },
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ng/api/projects/{identifier}?accountIdentifier={{account_id}}&orgIdentifier={{org_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "projects", "{identifier}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                },
+                {
+                  "key": "orgIdentifier",
+                  "value": "{{org_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "connectors",
+      "item": [
+        {
+          "name": "Create a Connector",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"connector\": {\n\t\t\"name\": \"{{connector_name}}\",\n\t\t\"identifier\": \"{{connector_identifier}}\",\n\t\t\"description\": \"A test connector created via postman collection.\",\n\t\t\"accountIdentifier\": \"{{account_id}}\",\n\t\t\"orgIdentifier\": \"{{org_id}}\",\n\t\t\"projectIdentifier\": \"{{project_id}}\",\n\t\t\"tags\": {},\n\t\t\"type\": \"K8sCluster\",\n\t\t\"spec\": {\n\t\t\t\"delegateSelectors\": [\n\t\t\t\t\"{{delegate_selectors}}\"\n\t\t\t],\n\t\t\t\"credential\": {\n\t\t\t\t\"type\": \"InheritFromDelegate\",\n\t\t\t\t\"spec\": null\n\t\t\t}\n\t\t}\n\t}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/ng/api/connectors?accountIdentifier={{account_id}}&storeType=INLINE",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "connectors"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                },
+                {
+                  "key": "branch",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "repoIdentifier",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "rootFolder",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "filePath",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "commitMsg",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "isNewBranch",
+                  "value": "false",
+                  "disabled": true
+                },
+                {
+                  "key": "baseBranch",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "connectorRef",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "storeType",
+                  "value": "INLINE"
+                },
+                {
+                  "key": "repoName",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "isHarnessCodeRepo",
+                  "value": "true",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Return Connector details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ng/api/connectors/{identifier}?accountIdentifier={{account_id}}&orgIdentifier={{org_id}}&projectIdentifier={{project_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "connectors", "{identifier}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                },
+                {
+                  "key": "orgIdentifier",
+                  "value": "{{org_id}}"
+                },
+                {
+                  "key": "projectIdentifier",
+                  "value": "{{project_id}}"
+                },
+                {
+                  "key": "branch",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "repoIdentifier",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "getDefaultFromOtherRepo",
+                  "value": "true",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a Connector",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ng/api/connectors/{identifier}?accountIdentifier={{account_id}}&orgIdentifier={{org_id}}&projectIdentifier={{project_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "connectors", "{identifier}"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                },
+                {
+                  "key": "orgIdentifier",
+                  "value": "{{org_id}}"
+                },
+                {
+                  "key": "projectIdentifier",
+                  "value": "{{project_id}}"
+                },
+                {
+                  "key": "branch",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "repoIdentifier",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "rootFolder",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "filePath",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "commitMsg",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "lastObjectId",
+                  "value": "string",
+                  "disabled": true
+                },
+                {
+                  "key": "forceDelete",
+                  "value": "false",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Test a Harness Connector",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ng/api/connectors/validateUniqueIdentifier?accountIdentifier={{account_id}}&orgIdentifier={{org_id}}&projectIdentifier={{project_id}}&identifier={{connector_identifier}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "connectors", "validateUniqueIdentifier"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                },
+                {
+                  "key": "orgIdentifier",
+                  "value": "{{org_id}}"
+                },
+                {
+                  "key": "projectIdentifier",
+                  "value": "{{project_id}}"
+                },
+                {
+                  "key": "identifier",
+                  "value": "{{connector_identifier}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Lists all Connectors for an account",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/ng/api/connectors/catalogue?accountIdentifier={{account_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "connectors", "catalogue"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "environments",
+      "item": [
+        {
+          "name": "Create an Environment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"orgIdentifier\": \"{{org_id}}\",\n\t\"projectIdentifier\": \"{{project_id}}\",\n\t\"identifier\": \"{{env_id}}\",\n\t\"tags\": {},\n\t\"name\": \"{{env_name}}\",\n\t\"description\": \"A test environment created via postman collection.\",\n\t\"type\": \"PreProduction\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/ng/api/environmentsV2?accountIdentifier={{account_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "environmentsV2"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "infrastructures",
+      "item": [
+        {
+          "name": "Create an Infrastructure in an Environment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "x-api-key",
+                "value": "YOUR_API_KEY_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"name\": \"{{infra_name}}\",\n\t\"identifier\": \"{{infra_identifier}}\",\n\t\"description\": \"A test infrastructure created via postman collection.\",\n\t\"tags\": {},\n\t\"orgIdentifier\": \"{{org_id}}\",\n\t\"projectIdentifier\": \"{{project_id}}\",\n\t\"environmentRef\": \"{{env_id}}\",\n\t\"deploymentType\": \"Kubernetes\",\n\t\"type\": \"KubernetesDirect\",\n\t\"yaml\": \"infrastructureDefinition:\\n  name: {{infra_name}}\\n  identifier: {{infra_identifier}}\\n  description: A test infrastructure created via postman collection.\\n  tags: {}\\n  orgIdentifier: {{org_id}}\\n  projectIdentifier: {{project_id}}\\n  environmentRef: {{env_id}}\\n  deploymentType: Kubernetes\\n  type: KubernetesDirect\\n  spec:\\n    connectorRef: {{connector_reference}}\\n    namespace: {{namespace}}\\n    releaseName: release-<+INFRA_KEY>\\n  allowSimultaneousDeployments: false\\n\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/ng/api/infrastructures?accountIdentifier={{account_id}}",
+              "host": ["{{url}}"],
+              "path": ["ng", "api", "infrastructures"],
+              "query": [
+                {
+                  "key": "accountIdentifier",
+                  "value": "{{account_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "value",
+        "value": "{{API-KEY-TOKEN}}",
+        "type": "string"
+      },
+      {
+        "key": "key",
+        "value": "X-API-KEY",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://app.harness.io"
+    },
+    {
+      "key": "url",
+      "value": "{{base_url}}/gateway"
+    },
+    {
+      "key": "account_id",
+      "value": "replace-with-your-account-id"
+    },
+    {
+      "key": "org_id",
+      "value": "replace-with-your-org-id"
+    },
+    {
+      "key": "project_id",
+      "value": "replace-with-your-project-id"
+    },
+    {
+      "key": "env_id",
+      "value": "replace-with-your-env-id"
+    },
+    {
+      "key": "API-KEY-TOKEN",
+      "value": "replace-with-your-api-key"
+    },
+    {
+      "key": "delegate_selectors",
+      "value": "replace-with-your-delegate-selectors"
+    }
+  ]
+}
