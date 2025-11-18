@@ -220,6 +220,8 @@ npm install -g newman
 # Run collection tests
 newman run "postman/collections/Harness Chaos Engineering APIs.postman_collection.json" \
   -e "postman/environments/QA.postman_environment.json"
+```
+
 
 ## Directory Structure
 
